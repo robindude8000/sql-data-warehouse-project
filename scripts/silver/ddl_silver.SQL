@@ -22,6 +22,7 @@ IF OBJECT_ID('silver.crm_prod_info', 'U') IS NOT NULL
 	DROP TABLE silver.crm_prod_info;
 CREATE TABLE silver.crm_prod_info (
 	prd_id INT,
+	cat_id NVARCHAR(50),
 	prd_key NVARCHAR(50),
 	prd_nm NVARCHAR(50),
 	prd_cost NVARCHAR(50),
