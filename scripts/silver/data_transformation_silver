@@ -1,10 +1,10 @@
 /*
 ===== Data Ingestion =====
 Script Purpose:
-	Create Stored Procedure that load transforme data into the 'silver' schema from bronze RAW data.
+	Create Stored Procedure that performs the ETL (Extract, Transform, Load) process to populate the silver schema.
   It performs the following actions:
     - Truncates existing data in silver tables if any
-    - Use bulk insert command to load the data from bronze to silver tables
+    - Inserts transformed and cleansed data from bronze into silver tables.
 
 Usage:
   EXEC silver.load_silver
