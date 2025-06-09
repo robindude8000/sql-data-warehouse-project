@@ -68,7 +68,7 @@ FROM bronze.crm_prod_info;
 
 
 -- =================================================================
--- Data Transformation Product Info and Loading to Silver table
+-- Data Transformation Sales Details and Loading to Silver table
 -- =================================================================
 
 INSERT INTO silver.crm_sales_details (
