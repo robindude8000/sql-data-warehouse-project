@@ -40,6 +40,7 @@ BEGIN
 		FROM bronze.crm_cust_info)t -- to filter out duplicated cst_ids
 	WHERE latest_created = 1 AND cst_id IS NOT NULL;
 
+	PRINT '=============================================================';
 
 	-- =================================================================
 	-- Data Transformation Product Info and Loading to Silver table
@@ -75,7 +76,7 @@ BEGIN
 		DATEADD(DAY, -1, LEAD (prd_start_dt) OVER (PARTITION BY prd_key ORDER BY prd_start_dt)) AS prd_end_dt
 	FROM bronze.crm_prod_info;
 
-
+	PRINT '=============================================================';
 
 	-- =================================================================
 	-- Data Transformation Sales Details and Loading to Silver table
@@ -120,7 +121,7 @@ BEGIN
 			 END AS sls_price
 	FROM bronze.crm_sales_details;
 
-	
+	PRINT '=============================================================';
 	
 	-- =====================================================================
 	-- Data Transformation ERP Customer Details and Loading to Silver table
@@ -141,6 +142,7 @@ BEGIN
 		gen
 	FROM bronze.erp_cust_az12;
 
+	PRINT '=============================================================';
 
 	-- =====================================================================
 	-- Data Transformation ERP Location Details and Loading to Silver table
@@ -163,10 +165,15 @@ BEGIN
 		END AS cntry
 	FROM bronze.erp_loc_a101;
 
+	PRINT '=============================================================';
+
 	-- =====================================================================
 	-- Data Transformation ERP Product Category and Loading to Silver table
 	-- =====================================================================
 
+	PRINT '>> Truncating Table: silver.erp_px_cat_g1v2';
+	TRUNCATE TABLE silver.erp_px_cat_g1v2;
+	PRINT '>> Inserting Bronze Data Into: silver.erp_px_cat_g1v2';
 	INSERT INTO silver.erp_px_cat_g1v2 (
 		id,
 		cat,
@@ -181,4 +188,4 @@ BEGIN
 	FROM bronze.erp_px_cat_g1v2;
 END
 
--- EXEC silver.load_silver
+-- EXEC silver.load_silver;
