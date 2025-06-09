@@ -106,3 +106,55 @@ SELECT
 		 ELSE sls_price
 		 END AS sls_price
 FROM bronze.crm_sales_details;
+
+-- =====================================================================
+-- Data Transformation ERP Customer Details and Loading to Silver table
+-- =====================================================================
+
+INSERT INTO silver.erp_cust_az12 (
+	cid,
+	bdate,
+	gen
+)
+
+SELECT
+	CASE WHEN LEN(cid) = 13 THEN SUBSTRING(cid, 4, LEN(cid)) ELSE cid END AS cid,
+	CASE WHEN bdate >= GETDATE() OR bdate < = '1925-01-01' THEN NULL ELSE bdate END AS bdate,
+	gen
+FROM bronze.erp_cust_az12;
+
+
+-- =====================================================================
+-- Data Transformation ERP Location Details and Loading to Silver table
+-- =====================================================================
+
+INSERT INTO silver.erp_loc_a101 (
+	cid,
+	cntry
+)
+
+SELECT
+	REPLACE (cid, '-', '') cid,
+	CASE WHEN TRIM(cntry) = 'DE' THEN 'Germany'
+		 WHEN TRIM(cntry) IN ('US', 'USA') THEN 'United States'
+		 WHEN cntry IS NULL OR cntry = '' THEN 'n/a'
+		 ELSE cntry
+	END AS cntry
+FROM bronze.erp_loc_a101;
+
+-- =====================================================================
+-- Data Transformation ERP Product Category and Loading to Silver table
+-- =====================================================================
+
+INSERT INTO silver.erp_px_cat_g1v2 (
+	id,
+	cat,
+	subcat,
+	maintenance
+)
+SELECT
+	id,
+	cat,
+	subcat,
+	maintenance
+FROM bronze.erp_px_cat_g1v2;
