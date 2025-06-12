@@ -1,16 +1,11 @@
-/*
-===== Data Ingestion =====
-Script Purpose:
-	Create Stored Procedure that performs the ETL (Extract, Transform, Load) process to populate the silver schema.
-  It performs the following actions:
-    - Truncates existing data in silver tables if any
-    - Inserts transformed and cleansed data from bronze into silver tables.
-
-Usage:
-  EXEC silver.load_silver
-*/
-
-CREATE OR ALTER PROCEDURE silver.load_silver AS
+USE [DataWarehouse]
+GO
+/****** Object:  StoredProcedure [silver].[load_silver]    Script Date: 6/12/2025 11:02:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER   PROCEDURE [silver].[load_silver] AS
 BEGIN
 	DECLARE @start_time DATETIME, @end_time DATETIME, @batch_start_time DATETIME, @batch_end_time DATETIME;
 	BEGIN TRY
@@ -178,7 +173,13 @@ BEGIN
 		SELECT
 			CASE WHEN LEN(cid) = 13 THEN SUBSTRING(cid, 4, LEN(cid)) ELSE cid END AS cid,
 			CASE WHEN bdate >= GETDATE() OR bdate < = '1925-01-01' THEN NULL ELSE bdate END AS bdate,
-			gen
+			CASE 
+				WHEN gen IS NULL THEN 'n/a'
+				WHEN gen = '' THEN 'n/a'
+				WHEN gen = 'F' THEN 'Female'
+				WHEN gen = 'M' THEN 'Male'
+				ELSE gen
+			END AS gen
 		FROM bronze.erp_cust_az12;
 
 		SET @end_time = GETDATE();
